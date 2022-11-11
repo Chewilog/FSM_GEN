@@ -4,56 +4,81 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity fsm is
         Port ( clk : in STD_LOGIC;
                rst : in STD_LOGIC;
+               valid: in STD_LOGIC;
                start: in STD_LOGIC;
-               x: out STD_LOGIC);
+               aux: in STD_LOGIC;
+               nsei: in STD_LOGIC;
+               clr: out STD_LOGIC;
+               en: out STD_LOGIC;
+               inc: out STD_LOGIC);
 end fsm;
 
 architecture Behavioral of fsm is
 
-type states is (DES,LIG1,LIG2,LIG3);
-signal acts,nxts:states:=DES;
+type states is (E0,E1,E2,E4);
+signal acts,nxts:states:=E0;
 
 begin
 stateReg:process(clk,rst)
 begin
     if rst = '1' then
-        acts <= DES;
+        acts <= E0;
     elsif rising_edge(clk) then
         acts <= nxts;    
     end if;
 end process;
 
-combLogic:process(acts,start)
+combLogic:process(acts,nsei,aux,start,valid)
 begin
 
 case acts is
-   when DES=>
-       if start='1' then 
-          nxts<= LIG1;
+   when E0=>
+       if start='1' and aux='1' then 
+          nxts<= E2;
+       elsif ((valid='0' and start='0') or aux='0') and valid='1' then
+          nxts<= E1;
        else
-          nxts<=DES;
+          nxts<=E0;
        end if;
-   when LIG1=>
-       nxts<=LIG2;
-   when LIG2=>
-       nxts<=LIG3;
-   when LIG3=>
-       nxts<=DES;
+   when E1=>
+       nxts<=E2;
+   when E2=>
+       if nsei='1' then 
+          nxts<= E4;
+       else
+          nxts<=E0;
+       end if;
+   when E4=>
+       nxts<=E2;
+   when others=>
+       nxts<= E0;
 end case;
 end process;
 
-outputLogic:process(acts,start)
+outputLogic:process(acts,nsei,aux,start,valid)
 begin
 
 case acts is
-   when DES=>
-       x<='0';
-   when LIG1=>
-       x<='1';
-   when LIG2=>
-       x<='1';
-   when LIG3=>
-       x<='1';
+   when E0=>
+       clr<='1';
+       en<='0';
+       inc<='0';
+   when E1=>
+       clr<='0';
+       en<='1';
+       inc<='0';
+   when E2=>
+       clr<='0';
+       en<='0';
+       inc<='1';
+   when E4=>
+       clr<='0';
+       en<='1';
+       inc<='1';
+   when others=>
+       clr<='0';
+       en<='0';
+       inc<='0';
 end case;
 end process;
 end Behavioral;

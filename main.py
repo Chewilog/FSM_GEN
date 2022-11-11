@@ -26,7 +26,9 @@ def translate_expression(expression, variables):
 
         elif i=='|':
             aux += ' or '
+            
         elif i=='&':
+            
             aux += ' and '
         else:
             aux += i
@@ -152,11 +154,13 @@ end process;'''
 
                 if transitions[transition][2] == 'else':
                     aux = transitions[transition][1]
+                    
                 else:
                     if cnt == 0:
                         entity += '       if ' + translate_expression(transitions[transition][2], inout[var_location][1]) + ' then \n'
                         entity += '          nxts<= ' + states[transitions[transition][1]] + ';\n'
                         cnt += 1
+                        
                     elif cnt<size-1 and cnt>0:
                         entity += '       elsif ' + translate_expression(transitions[transition][2], inout[var_location][1]) + ' then\n'
                         entity += '          nxts<= ' + states[transitions[transition][1]] + ';\n'
@@ -164,6 +168,9 @@ end process;'''
 
             entity += '       else\n          nxts<='+states[aux]+';\n'
             entity += '       end if;\n'
+    print(states[list(states.keys())[0]])
+    entity += "   when others=>\n"
+    entity += '       nxts<= '+states[list(states.keys())[0]]+';\n'
     entity += 'end case;\n'
     entity += 'end process;\n'
 
@@ -174,26 +181,32 @@ end process;'''
     entity += process_head
     entity += "\ncase acts is\n"
 
-
-
     for key in states.keys():
+
         entity += "   when " + states[key] + "=>\n"
         for i in inout.keys():
             if inout[i][0] == states[key]:
                 for output in inout[i][1]:
                     entity+='       ' + output+';\n'
 
+    entity += "   when others=>\n"
+    for i in inout[list(inout.keys())[1]][1]:#possivel fonte de erro
+        #print(i.split("<=")[0]+"<='0';")
+        entity += "       "+i.split("<=")[0]+"<='0';\n"
+    #print(inout[list(inout.keys())[0]][1])
+    #print(entity)
     entity += 'end case;\n'
     entity += 'end process;\n'
     entity+='end Behavioral;'
 
     file = open(name+'.vhd', 'w')
+    print(entity)
     file.write(entity)
     file.close()
 
 
-generate(str(sys.argv[1]), str(sys.argv[2]))
+#generate(str(sys.argv[1]), str(sys.argv[2]))
 print("File ready! Please check the reset state as it is \"randomly\" chosen.")
 # Press the green button in the gutter to run the script.
-# if __name__ == '__main__':
-#     generate('teste.xml', 'fsm')
+if __name__ == '__main__':
+     generate('teste.xml', 'fsm')

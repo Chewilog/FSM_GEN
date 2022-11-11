@@ -86,12 +86,21 @@ end process;'''
                 except:
                     states[dict_child['id']] = "000000"
                 states_transitions[dict_child['id']] = []
-            elif 'endArrow' in dict_child['style'] or 'orthogonalEdgeStyle' in dict_child['style']:
-
+            elif 'endArrow' in dict_child['style'] or 'orthogonalEdgeStyle' in dict_child['style']:#é bom melhorar esses try except
+                boolexp = '00000'
+                outexp = '00000'
                 try:
-                    transitions[dict_child['id']] = (dict_child['source'], dict_child['target'], dict_child['value'])
+                    if '/' in dict_child['value']:
+                        boolexp,outexp = dict_child['value'].split('/')
+                    else:
+                        boolexp = dict_child['value']
+                        outexp = '00000'
                 except:
-                    transitions[dict_child['id']] = (dict_child['source'], dict_child['target'], '000000')
+                    pass
+                try:
+                    transitions[dict_child['id']] = (dict_child['source'], dict_child['target'], boolexp, outexp)
+                except:
+                    transitions[dict_child['id']] = (dict_child['source'], dict_child['target'], '000000','000000')
 
             elif 'swimlane' in dict_child['style']:
 
@@ -141,7 +150,7 @@ end process;'''
     entity += process_head
 
     entity += "\ncase acts is\n"
-
+    print(transitions)
     for key in states.keys():
         entity += "   when " + states[key] + "=>\n"
         if len(states_transitions[key]) == 1:
@@ -191,22 +200,21 @@ end process;'''
 
     entity += "   when others=>\n"
     for i in inout[list(inout.keys())[1]][1]:#possivel fonte de erro
-        #print(i.split("<=")[0]+"<='0';")
+
         entity += "       "+i.split("<=")[0]+"<='0';\n"
-    #print(inout[list(inout.keys())[0]][1])
-    #print(entity)
+
     entity += 'end case;\n'
     entity += 'end process;\n'
     entity+='end Behavioral;'
-
+    print(entity)
     file = open(name+'.vhd', 'w')
-
+    print()
     file.write(entity)
     file.close()
 
 
-generate(str(sys.argv[1]), str(sys.argv[2]))
+#generate(str(sys.argv[1]), str(sys.argv[2]))
 #print("File ready! Please check the reset state as it is \"randomly\" chosen.")
 # Press the green button in the gutter to run the script.
-#if __name__ == '__main__':
-#     generate('teste.xml', 'fsm')
+if __name__ == '__main__':
+     generate('teste.xml', 'fsm')

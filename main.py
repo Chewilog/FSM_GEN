@@ -168,7 +168,7 @@ end process;'''
 
             entity += '       else\n          nxts<='+states[aux]+';\n'
             entity += '       end if;\n'
-    print(states[list(states.keys())[0]])
+
     entity += "   when others=>\n"
     entity += '       nxts<= '+states[list(states.keys())[0]]+';\n'
     entity += 'end case;\n'
@@ -200,13 +200,13 @@ end process;'''
     entity+='end Behavioral;'
 
     file = open(name+'.vhd', 'w')
-    print(entity)
+
     file.write(entity)
     file.close()
 
 
-#generate(str(sys.argv[1]), str(sys.argv[2]))
-print("File ready! Please check the reset state as it is \"randomly\" chosen.")
+generate(str(sys.argv[1]), str(sys.argv[2]))
+#print("File ready! Please check the reset state as it is \"randomly\" chosen.")
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-     generate('teste.xml', 'fsm')
+#if __name__ == '__main__':
+#     generate('teste.xml', 'fsm')

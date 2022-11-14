@@ -222,8 +222,15 @@ end process;'''
                 for output in inout[i][1]:
                     entity += '       ' + output+';\n'
 
+        is_moore=0
+        for i in mealy_state_outputs:
+            for j in  mealy_state_outputs[i]:
+                if j[1]=='00000':
+                    is_moore=1
+                    print('moore')
+
         size = len(list(states_transitions[key]))
-        if size == 1:
+        if size == 1 and not is_moore:
             aux = []
             for i in mealy_state_outputs[key]:
                 aux = i[1].split(',')
@@ -233,7 +240,7 @@ end process;'''
                     else:
                         entity += "       "+mealy_out[j.lower()][:-1]+"<='0';\n"
 
-        elif size > 1:
+        elif size > 1 and not is_moore:
             cnt = 0
             size = len(list(states_transitions[key]))
             for transition in mealy_state_outputs[key]:

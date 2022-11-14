@@ -227,7 +227,6 @@ end process;'''
             for j in  mealy_state_outputs[i]:
                 if j[1]=='00000':
                     is_moore=1
-                    print('moore')
 
         size = len(list(states_transitions[key]))
         if size == 1 and not is_moore:
@@ -284,15 +283,14 @@ end process;'''
     entity += 'end case;\n'
     entity += 'end process;\n'
     entity += 'end Behavioral;'
-    print(entity)
     file = open(name+'.vhd', 'w')
 
     file.write(entity)
     file.close()
 
 
-# generate(str(sys.argv[1]), str(sys.argv[2]))
+generate(str(sys.argv[1]), str(sys.argv[2]))
 # print("File ready! Please check the reset state as it is \"randomly\" chosen.")
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    generate('teste.xml', 'fsm')
+#if __name__ == '__main__':
+#    generate('teste.xml', 'fsm')

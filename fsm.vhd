@@ -10,10 +10,7 @@ entity fsm is
                nsei: in STD_LOGIC;
                clr: out STD_LOGIC;
                en: out STD_LOGIC;
-               inc: out STD_LOGIC;
-               s1: out STD_LOGIC;
-               s2: out STD_LOGIC;
-               s3: out STD_LOGIC);
+               inc: out STD_LOGIC);
 end fsm;
 
 architecture Behavioral of fsm is
@@ -66,55 +63,22 @@ case acts is
        clr<='1';
        en<='0';
        inc<='0';
-
-       if start='1' and aux='1' then 
-             s1<='0';
-             s2<='1';
-             s3<='1';
-       elsif ((valid='0' and start='0') or aux='0') and valid='1' then
-             s1<='1';
-             s2<='1';
-             s3<='1';
-       else
-             s1<='0';
-             s2<='0';
-             s3<='0';
-       end if;
    when E1=>
        clr<='0';
        en<='1';
        inc<='0';
-       s1<='0';
-       s2<='0';
-       s3<='0';
    when E2=>
        clr<='0';
        en<='0';
        inc<='1';
-
-       if nsei='1' then 
-             s1<='1';
-             s2<='0';
-             s3<='0';
-       else
-             s1<='1';
-             s2<='1';
-             s3<='0';
-       end if;
    when E4=>
        clr<='0';
        en<='1';
        inc<='1';
-       s1<='0';
-       s2<='1';
-       s3<='0';
    when others=>
        clr<='0';
        en<='0';
        inc<='0';
-       s1<='0';
-       s2<='0';
-       s3<='0';
 end case;
 end process;
 end Behavioral;

@@ -290,7 +290,7 @@ end process;'''
 
 
 generate(str(sys.argv[1]), str(sys.argv[2]))
-# print("File ready! Please check the reset state as it is \"randomly\" chosen.")
+print("File ready! Please check the reset state as it is \"randomly\" chosen.")
 # Press the green button in the gutter to run the script.
 #if __name__ == '__main__':
 #    generate('teste.xml', 'fsm')

@@ -187,7 +187,7 @@ end process;'''
                         entity += '          nxts<= ' + states[transitions[transition][1]] + ';\n'
                         cnt += 1
                         
-                    elif size-1 > cnt > 0:
+                    elif cnt<size-1 and cnt>0:
                         entity += '       elsif ' + translate_expression(transitions[transition][2], inout[var_location][1]) + ' then\n'
                         entity += '          nxts<= ' + states[transitions[transition][1]] + ';\n'
                         cnt += 1
@@ -283,15 +283,14 @@ end process;'''
     entity += 'end case;\n'
     entity += 'end process;\n'
     entity += 'end Behavioral;'
-    print(entity)
     file = open(name+'.vhd', 'w')
-    print(transitions,'\n',states)
+
     file.write(entity)
     file.close()
 
 
-# generate(str(sys.argv[1]), str(sys.argv[2]))
-# print("File ready! Please check the reset state as it is \"randomly\" chosen.")
+generate(str(sys.argv[1]), str(sys.argv[2]))
+print("File ready! Please check the reset state as it is \"randomly\" chosen.")
 # Press the green button in the gutter to run the script.
 #if __name__ == '__main__':
 #    generate('teste.xml', 'fsm')

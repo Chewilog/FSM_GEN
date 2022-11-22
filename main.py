@@ -1,6 +1,9 @@
 # This is a sample Python script.
 import xml.etree.ElementTree as ET
+from tb_generator import generate_tb
 import sys
+
+
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 AND_OP = "&"
@@ -283,9 +286,10 @@ end process;'''
     entity += 'end case;\n'
     entity += 'end process;\n'
     entity += 'end Behavioral;'
-    print(entity)
+
+    generate_tb(entity, states, states_transitions, transitions,inout,list_of_outputs,list_of_inputs,name_of_fsm)
     file = open(name+'.vhd', 'w')
-    print(transitions,'\n',states)
+
     file.write(entity)
     file.close()
 
@@ -293,5 +297,7 @@ end process;'''
 # generate(str(sys.argv[1]), str(sys.argv[2]))
 # print("File ready! Please check the reset state as it is \"randomly\" chosen.")
 # Press the green button in the gutter to run the script.
-#if __name__ == '__main__':
-#    generate('teste.xml', 'fsm')
+if __name__ == '__main__':
+    generate('teste.xml', 'fsm')
+
+
